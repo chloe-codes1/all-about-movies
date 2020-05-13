@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% block content %}
+
+<hr>
+<h4>Movies</h4>
+<hr>
+<div class="container">
+  <div class="row">
+  {% for movie in movies %}
+    <div class="col-6 col-sm-3">
+        <div class="card" style="width: 18rem;">
+          <img src="https://image.tmdb.org/t/p/w185_and_h278_bestv2/{{movie.poster}}" class="card-img-top" alt="movie image">
+          <div class="card-body">
+            <h5 class="card-title">{{movie.title}}</h5>
+            <p class="card-text text-warning">★   <span class="text-dark">{{movie.vote_average}}</span></p>
+            <a href="{% url 'movies:movie_detail' movie.pk %}" class="btn btn-warning">Detail</a>
+            <a href="{% url 'movies:review_create' movie.pk %}" class="btn btn-warning">Review</a>
+          </div>
+        </div>
+        <div></div>
+    </div>
+  {% endfor %}
+  </div>
+</div>
+{% endblock %}

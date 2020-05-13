@@ -1,5 +1,26 @@
 {% extends 'base.html' %}
 {% load bootstrap4 %}
 {% block content %}
-<h1>review_list</h1>
+<h4 class="mt-2 mb-4">Review List</h4>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">No</th>
+      <th scope="col">Movie</th>
+      <th scope="col">Review</th>
+      <th scope="col">Writer</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for review in reviews %}
+    <tr>
+      <th scope="row">{{review.pk}}</th>
+      <td><a class="text-decoration-none text-reset" href="{% url 'movies:movie_detail' review.movie.pk %}">{{review.movie.title}}</a></td>
+      <td><a class="text-decoration-none text-reset" href="{% url 'movies:review_detail' review.pk %}">{{review.title}}</a></td>
+      <td>{{review.user}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
 {% endblock %}

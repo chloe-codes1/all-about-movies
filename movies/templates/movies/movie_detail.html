@@ -4,16 +4,42 @@
 <h4>movie detail</h4>
 <hr>
 <div class="row">
-    <div class="col-3"><img src="{{movie.poster}}"></div>
+    <div class="col-3" style="height: 400px">
+        <img src="https://image.tmdb.org/t/p/w185_and_h278_bestv2/{{movie.poster}}" class="card-img-top" alt="movie image" width="70%" height="100%">
+    </div>
     <div class="col-9">
-        <h5>{{movie.title}}</h5>
+        <div class="d-flex justify-content-between">
+            <h5>{{movie.title}}</h5>
+            <a href="{% url 'movies:review_create' movie.pk %}" class="btn btn-secondary">Write a review</a>
+        </div>
         <hr>
         <p>Director: {{movie.director}}</p>
+        <p>Rating: {{movie.vote_average}}</p>
         <p>Genre: {{movie.genre}}</p>
     </div>
 </div>
+
+
+
 <hr>
 <p>{{movie.content}}</p>
 
 
+<div class="my-5">
+        <h4 class="mt-2 mb-4">Reviews for <strong>{{movie.title}} </strong></h4>
+    {% for review in movie.reviews.all %}
+        <p><strong><a href="{% url 'movies:review_detail' review.pk %}" class="text-decoration-none">{{review.title}}</a></strong> <span class="badge badge-warning">{{review.rating}}/5 </span> | {{review.user}}</p>
+    {% empty %}
+    <div class="my-5 text-center">
+        <h5> There is no review for this movie.</h5>
+        <p>Be the first reviewer!</p>
+    </div>
+    {% endfor %}
+</div>
+
+
+
 {% endblock %}
+
+
+

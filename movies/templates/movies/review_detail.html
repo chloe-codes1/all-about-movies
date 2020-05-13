@@ -1,11 +1,25 @@
 {% extends 'base.html' %}
 {% load bootstrap4 %}
 {% block content %}
-<h4>Review Detail</h4>
+<h4>Review for {{review.movie.title}}</h4>
 <hr>
 <div class="row">
-    <div class="col-3"><img src="{{movie.poster}}"></div>
-    
+    <div class="col-3">
+        {% if review.image %}
+            <img src="{{review.image_thumbnail.url}}"/>
+        {% else %}
+            <img src="https://image.tmdb.org/t/p/w185_and_h278_bestv2/{{review.movie.poster}}" width="70%" height="100%">
+        {% endif %}
+    </div>
+    <div class="col-9">
+        <div class="d-flex justify-content-between">
+            <h4 class="mt-2 mb-4">{{review.title}} </h4>
+            <p>{{review.user}}</p>
+        </div>
+        <p class="d-block">{{review.content}}</p>
+    </div>
+</div>
+
 </div>
 
 

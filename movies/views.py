@@ -14,9 +14,11 @@ from .forms import MovieForm, CommentForm, ReviewForm
 
 # main page - 영화 전체 목록
 def home(request):
-    movies = Movie.objects.order_by('-vote_average')
+    movies = Movie.objects.order_by('-vote_average')[:8]
+    boxoffice = movies[:3]
     context = {
         'movies': movies,
+        'boxoffice': boxoffice,
 
     }
     return render(request, 'movies/home.html', context)
@@ -32,6 +34,16 @@ def review_list(request):
     }
     return render(request, 'movies/review_list.html', context)
 
+# 전체 영화들 보기
+def movie_list(request):
+    movies = Movie.objects.order_by('-vote_average')
+    context = {
+        'movies': movies,
+
+    }
+    return render(request, 'movies/movie_list.html', context)
+
+
 # 영화별 상세보기 - 해당 영화 리뷰출력
 def movie_detail(request, movie_pk):
     movie = get_object_or_404(Movie, id=movie_pk)
@@ -41,14 +53,17 @@ def movie_detail(request, movie_pk):
     return render(request, 'movies/movie_detail.html', context)
 
 # 리뷰 작성 - review에 사진 첨부 할 수 있음!
+@login_required
 def review_create(request, movie_pk):
     if request.method == 'POST':
+        movie = get_object_or_404(Movie, id= movie_pk)
         form = ReviewForm(request.POST, request.FILES)
         if form.is_valid():
             review = form.save(commit=False)
             review.user = request.user
+            review.movie = movie
             review.save()
-            return redirect('movies:movie_detail')
+            return redirect('movies:movie_detail', movie_pk)
         messages.warning(request, 'Please check the form submitted')
     else:
         form = ReviewForm()

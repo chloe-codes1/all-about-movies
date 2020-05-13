@@ -18,7 +18,6 @@ class Movie(models.Model):
     poster = models.URLField(max_length=200)
     genre = models.CharField(max_length=100)
     vote_average = models.FloatField()
-
     content = models.TextField()
 
     @classmethod
@@ -31,25 +30,11 @@ class Movie(models.Model):
                     title=data[i].get('title'),
                     poster=data[i].get('poster_path'),
                     content=data[i].get('overview'),
-                    genre=data[i].get('genre'),
-                    vote_average=data[i].get('vote_average')
+                    genre=data[i].get('genre_ids'),
+                    vote_average=data[i].get('vote_average'),
+
                 )
 
-
-
-        # batch_size = number//10
-        # data = response['results'][0]
-        # objs = (cls(title=data[i].get('title'),
-        #             poster=data[i].get('poster_path'),
-        #             content=data[i].get('overview'),
-        #             genre=data[i].get('genre'),
-        #             vote_average=data[i].get('vote_average')
-        #             ) for i in range(number))
-        # while 1:
-        #     batch = list(islice(objs, batch_size))
-        #     if not batch:
-        #         break
-        #     cls.objects.bulk_create(batch, batch_size)
 
 class Review(models.Model):
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE, related_name='reviews')
@@ -65,7 +50,7 @@ class Review(models.Model):
     image = models.ImageField(blank=True)
     # DB 저장 x, 호출하게 되면 잘라서 표현
     image_thumbnail = ImageSpecField(source='image',
-                                      processors=[ResizeToFit(400, 400)],
+                                      processors=[ResizeToFit(300, 300)],
                                       format='JPEG',
                                       options={'quality': 60})
 

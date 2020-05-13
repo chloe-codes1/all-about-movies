@@ -1,11 +1,140 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.views.decorators.http import require_POST
+from django.db.models import Count, Prefetch
+
+
 from .models import Movie, Comment, Review
+from .forms import MovieForm, CommentForm, ReviewForm
 
 # Create your views here.
+
+
+
+# main page - 영화 전체 목록
 def home(request):
-    movies = Movie.objects.all()
+    movies = Movie.objects.order_by('-vote_average')
     context = {
-        'movies': movies
+        'movies': movies,
+
     }
     return render(request, 'movies/home.html', context)
 
+# review list page
+def review_list(request):
+    reviews = Review.objects.prefetch_related(
+        Prefetch('comments',
+                 queryset = Comment.objects.select_related('user'))
+        ).order_by('-pk')
+    context = {
+        'reviews': reviews,
+    }
+    return render(request, 'movies/review_list.html', context)
+
+# 영화별 상세보기 - 해당 영화 리뷰출력
+def movie_detail(request, movie_pk):
+    movie = get_object_or_404(Movie, id=movie_pk)
+    context = {
+        'movie': movie,
+    }
+    return render(request, 'movies/movie_detail.html', context)
+
+# 리뷰 작성 - review에 사진 첨부 할 수 있음!
+def review_create(request, movie_pk):
+    if request.method == 'POST':
+        form = ReviewForm(request.POST, request.FILES)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.user = request.user
+            review.save()
+            return redirect('movies:movie_detail')
+        messages.warning(request, 'Please check the form submitted')
+    else:
+        form = ReviewForm()
+    context = {
+        'form': form,
+    }
+    return render(request, 'movies/forms.html',context)
+
+# 리뷰 상세보기 - 각 리뷰 별 댓글 목록/댓글 입력창 출력
+def review_detail(request, review_pk):
+    review = get_object_or_404(Review, id= review_pk)
+    form = CommentForm()
+    context = {
+        'review': review,
+        'form': form,
+    }
+    return render(request, 'movies/review_detail.html', context)
+
+
+@login_required
+def review_update(request, review_pk):
+    review = get_object_or_404(Review, id=review_pk)
+    if request.user == review.user:
+        if request.method == 'POST':
+            form = ReviewForm(request.POST, request.FILES, instance=review)
+            if form.is_valid():
+                review = form.save(commit=False)
+                review.user = request.user
+                review.save()
+                return redirect('movies:review_detail', review.pk)
+        else:
+            form = ReviewForm(instance=review)
+        context = {
+            'form':form
+        }
+        return render(request, 'movies:forms.html', context)
+    else:
+        messages.warning(request, "Editting other people's review is not allowed")
+        return redirect('movies:review_detail')
+
+
+@login_required
+@require_POST
+def review_delete(request, review_pk):
+    review = get_object_or_404(Review, id=review_pk)
+    if request.user == post.user:
+        review.delete()
+        messages.add_message(request, messages.SUCCESS, 'Your review has been successfully deleted!')
+    return redirect('movies:home')
+
+
+
+# 댓글 작성 - 각 리뷰에 대한 댓글 입력
+@login_required
+@require_POST
+def comment_create(request, review_pk):
+    review = get_object_or_404(Review, pk=review_pk)
+    form = CommentForm(request.POST)
+    if form.is_valid():
+        comment = form.save(commit=False)
+        comment.review = review
+        comment.user = request.user
+        comment.save()
+    return redirect('movies:review_detail', review.pk)
+
+
+# 댓글 삭제 - 댓글 작성자일떄만 삭제
+@login_required
+@require_POST
+def comment_delete(request, review_pk, comment_pk):
+    comment = get_object_or_404(Comment, pk=comment_pk)
+    if request.user == comment.user:
+        comment.delete()
+    return redirect('movies:review_detail', review_pk)
+
+
+@login_required
+def like(request, review_pk):
+    review = get_object_or_404(Review, id=review_pk)
+    user = request.user
+    # ver1)
+    # if request.user in article.liked_users.all():
+
+    # ver2)
+    if review.liked_users.filter(id=user.id).exists():
+        review.liked_users.remove(user)
+    else:
+        review.liked_users.add(user)
+    return redirect('movies:review_detail', review_pk)

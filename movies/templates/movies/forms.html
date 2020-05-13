@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block content %}
+
+<div class="pb-3">
+{% if request.resolver_match.url_name == 'create'%}
+    <h3>Write a review</h3>
+{% else %}
+    <h3>Edit your review</h3>
+{% endif %}
+
+</div>
+
+  <form action="" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% bootstrap_form form%}
+    <button class="btn btn-warning"><strong>Submit</strong></button>
+  </form>
+{% endblock %}

@@ -4,6 +4,7 @@
 __pycache__
 myvenv
 db.sqlite3
+.env
 /static
 .DS_Store
 deploy.json

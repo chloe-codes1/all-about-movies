@@ -31,10 +31,8 @@ class Movie(models.Model):
                     poster=data[i].get('poster_path'),
                     content=data[i].get('overview'),
                     genre=data[i].get('genre_ids'),
-                    vote_average=data[i].get('vote_average'),
-
+                    vote_average=data[i].get('vote_average')
                 )
-
 
 class Review(models.Model):
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE, related_name='reviews')

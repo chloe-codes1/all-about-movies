@@ -2,9 +2,10 @@
 {% load bootstrap4 %}
 {% block content %}
 <h4 class="mt-2 mb-4">Review List</h4>
+<hr>
 <table class="table">
   <thead>
-    <tr>
+    <tr class="bg-warning">
       <th scope="col">No</th>
       <th scope="col">Movie</th>
       <th scope="col">Review</th>
@@ -16,8 +17,8 @@
     <tr>
       <th scope="row">{{review.pk}}</th>
       <td><a class="text-decoration-none text-reset" href="{% url 'movies:movie_detail' review.movie.pk %}">{{review.movie.title}}</a></td>
-      <td><a class="text-decoration-none text-reset" href="{% url 'movies:review_detail' review.pk %}">{{review.title}}</a></td>
-      <td>{{review.user}}</td>
+      <td><a class="text-decoration-none text-reset" href="{% url 'movies:review_detail' review.pk %}"> <span class="badge badge-dark text-warning mr-2">★ {{review.rating}} </span>  {{review.title}}</a></td>
+      <td><a class="text-decoration-none" href="{% url 'profile' review.user.username %}" >{{review.user}}</a></td>
     </tr>
     {% endfor %}
   </tbody>

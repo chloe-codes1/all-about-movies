@@ -28,7 +28,7 @@
 <div class="my-5">
         <h4 class="mt-2 mb-4">Reviews for <strong>{{movie.title}} </strong></h4>
     {% for review in movie.reviews.all %}
-        <p><strong><a href="{% url 'movies:review_detail' review.pk %}" class="text-decoration-none">{{review.title}}</a></strong> <span class="badge badge-warning">{{review.rating}}/5 </span> | {{review.user}}</p>
+        <p><strong><a href="{% url 'movies:review_detail' review.pk %}" class="text-decoration-none">{{review.title}}</a></strong> <span class="badge badge-warning">{{review.rating}}/5 </span> | <a href="{% url 'profile' review.user.username %}" >{{review.user}}</a></p>
     {% empty %}
     <div class="my-5 text-center">
         <h5> There is no review for this movie.</h5>

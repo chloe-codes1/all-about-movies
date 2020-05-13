@@ -4,16 +4,16 @@
 
 <h4>Box Office</h4>
 <hr>
-<div id="carouselControls" class="carousel slide w-100 mx-auto" data-ride="carousel" style="height:500px;">
+<div id="carouselControls" class="carousel slide w-100 mx-auto" data-ride="carousel" >
   <div class="carousel-inner">
       {% for movie in boxoffice %}
       {% if movie == boxoffice.first %}
-        <div class="carousel-item active w-100 bg-dark d-flex">
-          <img src="https://image.tmdb.org/t/p/w185_and_h278_bestv2/{{movie.poster}}" class="w-100" alt="boxoffice movie" style="height:500px;">
+        <div class="carousel-item active w-100 bg-dark d-flex justify-content-center">
+          <img src="https://image.tmdb.org/t/p/w185_and_h278_bestv2/{{movie.poster}}"  alt="boxoffice movie" width="50%" height="100%">
         </div>
       {% else %}
-        <div class="carousel-item w-100 bg-dark">
-          <img src="https://image.tmdb.org/t/p/w185_and_h278_bestv2/{{movie.poster}}" class="w-100" alt="boxoffice movie" style="height:500px;">
+        <div class="carousel-item w-100 bg-dark text-center">
+          <img src="https://image.tmdb.org/t/p/w185_and_h278_bestv2/{{movie.poster}}"  alt="boxoffice movie" width="50%" height="100%">
         </div>
       {% endif %}
     {% endfor %}
@@ -35,7 +35,7 @@
   <div class="row">
   {% for movie in movies %}
     <div class="col-6 col-sm-3">
-        <div class="card" style="width: 18rem;">
+        <div class="card" style="width: 280px; ">
           <img src="https://image.tmdb.org/t/p/w185_and_h278_bestv2/{{movie.poster}}" class="card-img-top" alt="movie image">
           <div class="card-body">
             <h5 class="card-title">{{movie.title}}</h5>

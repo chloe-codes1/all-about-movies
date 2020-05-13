@@ -6,6 +6,9 @@ from django.contrib.auth import login as auth_login, logout as auth_logout, get_
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
+
+User = get_user_model()
+
 # Create your views here.
 def signup(request):
     if request.user.is_authenticated:
@@ -15,7 +18,7 @@ def signup(request):
         if form.is_valid():
             form.save()
             messages.add_message(request, messages.INFO, 'Welcome! Please login.')
-            return redirect('movies:home')
+            return redirect('home')
     else:
         form = CustomUserCreationForm()
     context = {
@@ -26,13 +29,13 @@ def signup(request):
 
 def login(request):
     if request.user.is_authenticated:
-        return redirect('movies:home')
+        return redirect('home')
     if request.method == 'POST':
         form = AuthenticationForm(request, request.POST)
         if form.is_valid():
             auth_login(request, form.get_user())
             messages.add_message(request, messages.INFO, "You've been successfully logged in")
-            return redirect(request.GET.get('next') or 'movies:home')
+            return redirect(request.GET.get('next') or 'home')
     else:
         form = AuthenticationForm()
     context = {
@@ -46,7 +49,7 @@ def login(request):
 def logout(request):
     auth_logout(request)
     messages.add_message(request, messages.SUCCESS, "You've been logged out.")
-    return redirect('movies:home')
+    return redirect('home')
 
 
 def update(request):
@@ -54,7 +57,7 @@ def update(request):
         form = CustomUserChangeForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
-            return redirect('movies:home')
+            return redirect('home')
     else:
         form = CustomUserChangeForm(instance=request.user)
     context ={
@@ -68,4 +71,26 @@ def update(request):
 def delete(request):
     request.user.delete()
     messages.add_message(request, messages.DANGER, "Your account has been deleted.")
-    return redirect('movies:home')
+    return redirect('home')
+
+def profile(request, username):
+    #해당 유저 (username)의 정보를 보여줌
+    person = get_object_or_404(User, username=username)
+    context = {
+        'person': person,
+    }
+    return render(request, 'accounts/profile.html', context)
+
+
+@login_required
+def follow(request, username):
+    person = get_object_or_404(User, username=username)
+    user = request.user
+    # ver1)
+    if user in person.followers.all():
+    # ver2)
+    # if person.followers.filter(username=username).exists():
+        person.followers.remove(user)
+    else:
+        person.followers.add(user)
+    return redirect('profile', person.username)

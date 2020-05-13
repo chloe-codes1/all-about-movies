@@ -148,8 +148,8 @@ def like(request, review_pk):
     # if request.user in article.liked_users.all():
 
     # ver2)
-    if review.liked_users.filter(id=user.id).exists():
-        review.liked_users.remove(user)
+    if review.like_users.filter(id=user.id).exists():
+        review.like_users.remove(user)
     else:
-        review.liked_users.add(user)
+        review.like_users.add(user)
     return redirect('movies:review_detail', review_pk)

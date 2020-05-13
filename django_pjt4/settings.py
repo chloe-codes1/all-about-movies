@@ -33,7 +33,7 @@ ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     'django_extensions',
     'bootstrap4',
-    'tmdb',
+    'mathfilters',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -129,6 +129,9 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 MEDIA_URL = '/media/'
+
+# 내가 정의한 User 쓸꺼얌
+AUTH_USER_MODEL = 'accounts.User'
 
 
 #TMDB API~~

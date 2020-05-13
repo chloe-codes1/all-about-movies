@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 {% load bootstrap4 %}
+{% load mathfilters %}
 {% block content %}
 <h4>Review for {{review.movie.title}}</h4>
 <hr>
-<div class="row">
+<div class="row px-4">
     <div class="col-3">
         {% if review.image %}
             <img src="{{review.image_thumbnail.url}}"/>
@@ -12,15 +13,68 @@
         {% endif %}
     </div>
     <div class="col-9">
-        <div class="d-flex justify-content-between">
-            <h4 class="mt-2 mb-4">{{review.title}} </h4>
-            <p>{{review.user}}</p>
+        <div class="d-flex justify-content-between mt-2 mb-4">
+            <h4>{{review.title}} </h4>
+            <div >
+                 <span>
+                     <a href="{% url 'movies:like' review.pk %}">
+                        {% if request.user in review.like_users.all %}
+                        <i class="fas fa-heart fa-lg text-danger mr-2"></i>
+                        {% else %}
+                        <i class="far fa-heart fa-lg text-danger mr-2 animated infinite bounce slow delay-1s"></i>
+                        {% endif %}
+                    </a>
+                 </span>
+                 <span>
+                  {% if review.like_users.count >= 2 %}
+                    Liked by {{article.like_users.first }} and {{review.like_users.count|sub:1}} others
+                  {% elif review.like_users.count == 1 %}
+                    Liked by {{review.like_users.first }}
+                  {% else %}
+                  {% endif %}
+                </span>
+            </div>
+        </div>
+        <div class="d-flex justify-content-between ">
+            <p><strong>{{review.user}}</strong></p>
+            <p style="font-size: 0.8rem">{{review.created_at|date:'Y-m-d H:i'}}</p>
         </div>
         <p class="d-block">{{review.content}}</p>
     </div>
 </div>
+{% if request.user == review.user %}
+<a class="btn btn-success" href="{% url 'movies:review_update' review.pk %}">Update</a>
+<a class="btn btn-danger" href="{% url 'movies:review_delete' review.pk %}">Delete</a>
+{% endif %}
+<hr>
 
+
+
+
+<h5>Comment {% if review.comments %} | <small>({{review.comments.count}})</small>  {% endif %}</h5>
+
+<hr>
+{% for comment in review.comments.all %}
+<div class="d-flex justify-content-between">
+  <p>{{comment.content}}</p>
+  <div class="d-flex justify-content-end">
+    <p class="px-2">{{comment.user}}</p>
+    {% if comment.user == request.user %}
+      <a href="{% url 'movies:comment_delete' review.pk comment.pk %}">Delete</a>
+    {% endif %}
+  </div>
 </div>
+{% endfor %}
 
-
+{% if user.is_authenticated %}
+<div>
+  <form action= "{% url 'movies:comment_create' review.pk  %}" method='POST'>
+    {% csrf_token %}
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="w-100">{% bootstrap_form form %}</div>
+      <div><button class="btn btn-warning mb-2">Submit</button></div>
+    </div>
+  </form>
+</div>
+{% endif %}
 {% endblock %}

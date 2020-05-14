@@ -7,14 +7,15 @@ from imagekit.processors import ResizeToFit
 #TMDB
 from django.conf import settings
 import requests
+import random
 
 
 key = settings.TMDB_API_KEY
 base_url = 'https://api.themoviedb.org/3/'
-
+kinds = ['latest', 'popular', 'top_rated', 'upcoming', 'now_playing']
 
 class Movie(models.Model):
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=100, unique=True)
     poster = models.URLField(max_length=200)
     genre = models.CharField(max_length=100)
     vote_average = models.FloatField()
@@ -22,7 +23,9 @@ class Movie(models.Model):
 
     @classmethod
     def TMDB(cls, number):
-        url = f'{base_url}movie/top_rated?api_key={key}&language=en-US&page=1'
+        kinds = ['latest', 'popular', 'top_rated', 'upcoming', 'now_playing']
+        which_kind = random.choice(kinds)
+        url = f'{base_url}movie/{which_kind}?api_key={key}&language=en-US&page=1'
         response = requests.get(url).json()
         data = response['results']
         for i in range(number):

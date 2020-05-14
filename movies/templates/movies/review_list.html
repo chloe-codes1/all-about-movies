@@ -10,6 +10,8 @@
       <th scope="col">Movie</th>
       <th scope="col">Review</th>
       <th scope="col">Writer</th>
+      <th scope="col">Likes</th>
+      <th scope="col">Comments</th>
     </tr>
   </thead>
   <tbody>
@@ -19,6 +21,8 @@
       <td><a class="text-decoration-none text-reset" href="{% url 'movies:movie_detail' review.movie.pk %}">{{review.movie.title}}</a></td>
       <td><a class="text-decoration-none text-reset" href="{% url 'movies:review_detail' review.pk %}"> <span class="badge badge-dark text-warning mr-2">★ {{review.rating}} </span>  {{review.title}}</a></td>
       <td><a class="text-decoration-none" href="{% url 'profile' review.user.username %}" >{{review.user}}</a></td>
+      <td>{{review.like_users.count}}</td>
+      <td>{{review.comments.count}}</td>
     </tr>
     {% endfor %}
   </tbody>

@@ -13,16 +13,15 @@ import requests
 
 # Create your views here.
 
-
-
 # main page - 영화 전체 목록
 def home(request):
+    if Movie.objects.count() == 0:
+        Movie.TMDB(20)
     movies = Movie.objects.order_by('-vote_average')[:8]
     boxoffice = movies[:3]
     context = {
         'movies': movies,
         'boxoffice': boxoffice,
-
     }
     return render(request, 'movies/home.html', context)
 
@@ -166,3 +165,12 @@ def like(request, review_pk):
     else:
         review.like_users.add(user)
     return redirect('movies:review_detail', review_pk)
+
+def search(request):
+    keyword = request.POST.get('keyword')
+    movies = Movie.objects.filter(title__icontains=keyword)
+    context = {
+        'movies': movies,
+        'keyword': keyword,
+    }
+    return render(request, 'movies/movie_list.html', context)

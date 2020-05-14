@@ -3,7 +3,13 @@
 {% block content %}
 
 <hr>
-<h4>Movies</h4>
+
+{% if request.resolver_match.url_name == 'search' %}
+  <h4>Search Result for "{{keyword}}"</h4>
+{% else %}
+  <h4>Movies</h4>
+{% endif %}
+
 <hr>
 <div class="container">
   <div class="row">

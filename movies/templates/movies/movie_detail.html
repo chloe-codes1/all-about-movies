@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load bootstrap4 %}
 {% block content %}
-<h4>movie detail</h4>
+<h4>Movie Detail</h4>
 <hr>
 <div class="row">
     <div class="col-3" style="height: 400px">
@@ -9,26 +9,31 @@
     </div>
     <div class="col-9">
         <div class="d-flex justify-content-between">
-            <h5>{{movie.title}}</h5>
+            <h5 class="mt-2">{{movie.title}}</h5>
             <a href="{% url 'movies:review_create' movie.pk %}" class="btn btn-secondary">Write a review</a>
         </div>
         <hr>
-        <p>Director: {{movie.director}}</p>
+        <p>Release Date: {{release_date}}</p>
         <p>Rating: {{movie.vote_average}}</p>
-        <p>Genre: {{movie.genre}}</p>
+        <p>Genre: {% for genre in genres %} <span class="ml-2 text-secondary"><strong>{{genre}}</strong></span>{% endfor %}</p>
+        <p>Country: {{country}}</p>
     </div>
 </div>
 
 
-
 <hr>
+<div class="mx-3">
+<h5>Overview for movie</h5>
 <p>{{movie.content}}</p>
-
+<hr>
 
 <div class="my-5">
-        <h4 class="mt-2 mb-4">Reviews for <strong>{{movie.title}} </strong></h4>
+        <h5 class="mt-2 mb-4">Reviews for <strong>{{movie.title}} </strong></h5>
     {% for review in movie.reviews.all %}
-        <p><strong><a href="{% url 'movies:review_detail' review.pk %}" class="text-decoration-none">{{review.title}}</a></strong> <span class="badge badge-warning">{{review.rating}}/5 </span> | <a href="{% url 'profile' review.user.username %}" >{{review.user}}</a></p>
+        <p>
+            <strong><a href="{% url 'movies:review_detail' review.pk %}" class="text-decoration-none">{{review.title}}</a></strong>
+            <span class="badge badge-warning mr-2">{{review.rating}}/5 </span>  |
+            <a href="{% url 'profile' review.user.username %}" class="ml-2 text-decoration-none text-reset"><img src="{{request.user.gravatar_url}}" class="rounded-circle mr-2" height="30" width="30"/> {{review.user}}</a></p>
     {% empty %}
     <div class="my-5 text-center">
         <h5> There is no review for this movie.</h5>
@@ -37,8 +42,7 @@
     {% endfor %}
 </div>
 
-
-
+</div>
 {% endblock %}
 
 

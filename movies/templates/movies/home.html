@@ -35,8 +35,8 @@
   <div class="row">
   {% for movie in movies %}
     <div class="col-6 col-sm-3">
-        <div class="card" style="width: 280px; ">
-          <img src="https://image.tmdb.org/t/p/w342//{{movie.poster}}" class="card-img-top" alt="movie image">
+        <div class="card" style="width: 280px;">
+          <a href="{% url 'movies:movie_detail' movie.pk %}"><img src="https://image.tmdb.org/t/p/w342//{{movie.poster}}" class="card-img-top" alt="movie image" height="400"></a>
           <div class="card-body">
             <h5 class="card-title">{{movie.title}}</h5>
             <p class="card-text text-warning">★   <span class="text-dark">{{movie.vote_average}}</span></p>

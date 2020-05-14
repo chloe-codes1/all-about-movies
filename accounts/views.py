@@ -16,7 +16,8 @@ def signup(request):
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
+            auth_login(request, user)
             messages.add_message(request, messages.INFO, 'Welcome! Please login.')
             return redirect('home')
     else:

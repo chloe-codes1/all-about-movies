@@ -17,9 +17,9 @@ kinds = ['latest', 'popular', 'top_rated', 'upcoming', 'now_playing']
 class Movie(models.Model):
     title = models.CharField(max_length=100, unique=True)
     poster = models.URLField(max_length=200)
-    genre = models.CharField(max_length=100)
     vote_average = models.FloatField()
     content = models.TextField()
+    tmdb_id = models.IntegerField()
 
     @classmethod
     def TMDB(cls, number):
@@ -33,8 +33,8 @@ class Movie(models.Model):
                     title=data[i].get('title'),
                     poster=data[i].get('poster_path'),
                     content=data[i].get('overview'),
-                    genre=data[i].get('genre_ids'),
-                    vote_average=data[i].get('vote_average')
+                    vote_average=data[i].get('vote_average'),
+                    tmdb_id=data[i].get('id'),
                 )
 
 class Review(models.Model):

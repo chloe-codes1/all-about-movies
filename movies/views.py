@@ -4,9 +4,12 @@ from django.contrib import messages
 from django.views.decorators.http import require_POST
 from django.db.models import Count, Prefetch
 
-
 from .models import Movie, Comment, Review
 from .forms import MovieForm, CommentForm, ReviewForm
+
+from django.conf import settings
+import requests
+
 
 # Create your views here.
 
@@ -47,8 +50,18 @@ def movie_list(request):
 # 영화별 상세보기 - 해당 영화 리뷰출력
 def movie_detail(request, movie_pk):
     movie = get_object_or_404(Movie, id=movie_pk)
+    tmdb_id = movie.tmdb_id
+    url = f'https://api.themoviedb.org/3/movie/{tmdb_id}?api_key=763c6d15a6a1f3af5c6b8f7cb7b3fdcd&language=en-US&language=en-US'
+    response = requests.get(url).json()
+    data = response['genres']
+    release_date = response['release_date']
+    country = response['production_countries'][0].get('name')
+    genres = (data[i].get('name') for i in range(len(data)))
     context = {
         'movie': movie,
+        'genres': genres,
+        'release_date': release_date,
+        'country': country
     }
     return render(request, 'movies/movie_detail.html', context)
 

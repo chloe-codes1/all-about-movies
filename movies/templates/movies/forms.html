@@ -2,9 +2,9 @@
 {% load bootstrap4 %}
 
 {% block content %}
-
+<div class="w-75 m-auto">
 <div class="pb-3">
-{% if request.resolver_match.url_name == 'create'%}
+{% if request.resolver_match.url_name == 'review_create'%}
     <h3>Write a review</h3>
 {% else %}
     <h3>Edit your review</h3>
@@ -17,4 +17,5 @@
     {% bootstrap_form form%}
     <button class="btn btn-warning"><strong>Submit</strong></button>
   </form>
+</div>
 {% endblock %}

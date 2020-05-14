@@ -20,7 +20,6 @@
     </div>
 </div>
 
-
 <hr>
 <div class="mx-3">
 <h5>Overview for movie</h5>
@@ -33,7 +32,7 @@
         <p>
             <strong><a href="{% url 'movies:review_detail' review.pk %}" class="text-decoration-none">{{review.title}}</a></strong>
             <span class="badge badge-warning mr-2">{{review.rating}}/5 </span>  |
-            <a href="{% url 'profile' review.user.username %}" class="ml-2 text-decoration-none text-reset"><img src="{{request.user.gravatar_url}}" class="rounded-circle mr-2" height="30" width="30"/> {{review.user}}</a></p>
+            <a href="{% url 'profile' review.user.username %}" class="ml-2 text-decoration-none text-reset"><img src="{{review.user.gravatar_url}}" class="rounded-circle mr-2" height="30" width="30"/> {{review.user}}</a></p>
     {% empty %}
     <div class="my-5 text-center">
         <h5> There is no review for this movie.</h5>

@@ -23,7 +23,7 @@ class Movie(models.Model):
 
     @classmethod
     def TMDB(cls, number):
-        kinds = ['latest', 'popular', 'top_rated']
+        kinds = ['top_rated']
         which_kind = random.choice(kinds)
         url = f'{base_url}movie/{which_kind}?api_key={key}&language=en-US&page=1'
         response = requests.get(url).json()

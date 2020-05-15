@@ -339,3 +339,9 @@ $ heroku open
 <br>
 
 ### 5. You are now live!
+
+<br>
+
+<br>
+
+### *[Click here to learn more about Heroku Deployment!](https://github.com/chloe-codes1/TIL/blob/master/Server/Deployment/Deploying_a_Django_project_on_Heroku.md)*

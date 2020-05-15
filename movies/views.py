@@ -7,7 +7,7 @@ from django.db.models import Count, Prefetch
 from .models import Movie, Comment, Review
 from .forms import MovieForm, CommentForm, ReviewForm
 
-from django.conf import settings
+import os
 import requests
 
 
@@ -50,7 +50,8 @@ def movie_list(request):
 def movie_detail(request, movie_pk):
     movie = get_object_or_404(Movie, id=movie_pk)
     tmdb_id = movie.tmdb_id
-    url = f'https://api.themoviedb.org/3/movie/{tmdb_id}?api_key=763c6d15a6a1f3af5c6b8f7cb7b3fdcd&language=en-US&language=en-US'
+    key = os.environ.get('TMDB_API_KEY')
+    url = f'https://api.themoviedb.org/3/movie/{tmdb_id}?api_key={key}&language=en-US&language=en-US'
     response = requests.get(url).json()
     data = response['genres']
     release_date = response['release_date']

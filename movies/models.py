@@ -10,8 +10,7 @@ import requests
 import random
 
 
-# key = settings.TMDB_API_KEY
-key = '763c6d15a6a1f3af5c6b8f7cb7b3fdcd'
+key = settings.TMDB_API_KEY
 base_url = 'https://api.themoviedb.org/3/'
 kinds = ['latest', 'popular', 'top_rated', 'upcoming', 'now_playing']
 

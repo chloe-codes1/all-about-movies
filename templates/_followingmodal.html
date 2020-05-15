@@ -19,7 +19,7 @@
               {% if request.user != following %}
                 <a href="{% url 'follow' following.username %}" class="d-block m-auto btn btn-warning text-white">
                     <strong>
-                    {% if request.user in person.followings.all %}
+                    {% if request.user in following.followers.all %}
                         Following
                     {% else %}
                         Follow

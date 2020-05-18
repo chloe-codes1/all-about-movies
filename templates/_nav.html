@@ -22,7 +22,7 @@
     <ul class="navbar-nav ml-auto">
       <form class="form-inline mr-2" action="{% url 'search' %}" method="POST">
         {% csrf_token %}
-          <input class="form-control mr-sm-2" name="keyword"type="search" placeholder="Search by movie titles" aria-label="Search">
+          <input class="form-control mr-sm-2" name="keyword"type="search" placeholder="Search movies or reviews" aria-label="Search">
         </form>
       {% if user.is_authenticated %}
        <li><img src="{{request.user.gravatar_url}}" class="rounded-circle" height="50" width="50"/></li>

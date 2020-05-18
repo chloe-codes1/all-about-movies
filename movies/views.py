@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.views.decorators.http import require_POST
-from django.db.models import Count, Prefetch
+from django.db.models import Count, Prefetch, Q
 
 from .models import Movie, Comment, Review
 from .forms import MovieForm, CommentForm, ReviewForm
@@ -112,7 +112,7 @@ def review_update(request, review_pk):
         context = {
             'form':form
         }
-        return render(request, 'movies:forms.html', context)
+        return render(request, 'movies/forms.html', context)
     else:
         messages.warning(request, "Editting other people's review is not allowed")
         return redirect('movies:review_detail')
@@ -122,10 +122,10 @@ def review_update(request, review_pk):
 @require_POST
 def review_delete(request, review_pk):
     review = get_object_or_404(Review, id=review_pk)
-    if request.user == post.user:
+    if request.user == review.user:
         review.delete()
         messages.add_message(request, messages.SUCCESS, 'Your review has been successfully deleted!')
-    return redirect('movies:home')
+    return redirect('home')
 
 
 
@@ -169,7 +169,10 @@ def like(request, review_pk):
 
 def search(request):
     keyword = request.POST.get('keyword')
-    movies = Movie.objects.filter(title__icontains=keyword)
+    movies = Movie.objects.filter(
+            Q(title__icontains=keyword) | Q(content__icontains=keyword) | 
+            Q(reviews__title__icontains=keyword) | Q(reviews__content__icontains=keyword)
+            )
     context = {
         'movies': movies,
         'keyword': keyword,

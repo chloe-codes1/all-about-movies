@@ -48,7 +48,10 @@
     {% if request.user == review.user %}
 <div class="my-3 mx-3">
     <a class="btn btn-success" href="{% url 'movies:review_update' review.pk %}">Update</a>
-    <a class="btn btn-danger" href="{% url 'movies:review_delete' review.pk %}">Delete</a>
+    <form action="{% url 'movies:review_delete' review.pk %}" method="POST" class="d-inline">
+      {% csrf_token %}
+      <button class="btn btn-danger">Delete</button>
+  </form>
 </div>
 {% endif %}
 <hr>

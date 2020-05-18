@@ -38,7 +38,7 @@
 
 - ### Search
 
-  - Search by movie titles
+  - Search by movie titles, contents, review titles, contents
 
 <br>
 

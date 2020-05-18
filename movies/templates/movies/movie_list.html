@@ -14,8 +14,8 @@
 <div class="container">
   <div class="row">
   {% for movie in movies %}
-    <div class="col-6 col-sm-3">
-        <div class="card" style="width: 280px;">
+    <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+        <div class="card" style="width: 100%;">
           <a href="{% url 'movies:movie_detail' movie.pk %}"><img src="https://image.tmdb.org/t/p/w342//{{movie.poster}}" class="card-img-top" alt="movie image" height="400"></a>
           <div class="card-body">
             <h5 class="card-title">{{movie.title}}</h5>

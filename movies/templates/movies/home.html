@@ -8,9 +8,9 @@
   <div class="carousel-inner">
       {% for movie in boxoffice %}
       {% if movie == boxoffice.first %}
-        <div class="carousel-item active w-100 bg-dark d-flex justify-content-center">
+      <div class="carousel-item active w-100 bg-dark d-flex justify-content-center">
           <img src="https://image.tmdb.org/t/p/w780//{{movie.poster}}"  alt="boxoffice movie" width="50%" height="1300px">
-        </div>
+    </div>
       {% else %}
         <div class="carousel-item w-100 bg-dark text-center">
           <img src="https://image.tmdb.org/t/p/w780//{{movie.poster}}"  alt="boxoffice movie" width="50%" height="1300px">
